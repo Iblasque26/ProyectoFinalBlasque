@@ -16,7 +16,7 @@ function cargarCarrito() {
         carritoAcciones.classList.remove("disabled");
         carritoCompra.classList.add("disabled");
 
-        carritoProductos.innerHTML = ""; // Limpiamos el contenido existente
+        carritoProductos.innerHTML = ""; 
 
         productosDelCarritoLS.forEach(producto => {
             const div = document.createElement("div");
