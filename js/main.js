@@ -5,96 +5,57 @@ document.addEventListener("DOMContentLoaded", function () {
     numeroCarritoElement.textContent = cantidadTotalEnCarrito;
 });
 
-const productos = [
-    {
-        id: "Anillo-Saanvi",
-        titulo: "Anillo Saanvi",
-        imagen: "../img/anillouno.jpeg",
-        categoria: {
-            nombre: "Anillos",
-            id: "anillos",
-        },
-        precio: 500,
-    },
-    {
-        id: "Anillo-Ana",
-        titulo: "Anillo Ana",
-        imagen: "../img/anillodos.jpg",
-        categoria: {
-            nombre: "Anillos",
-            id: "anillos",
-        },
-        precio: 500,
-    },
-    {
-        id: "Pulsera-Alegra",
-        titulo: "Pulsera Alegra",
-        imagen: "../img/pulserauno.jpeg",
-        categoria: {
-            nombre: "Pulseras",
-            id: "pulseras",
-        },
-        precio: 700,
-    },
-    {
-        id: "Pulsera-Cactus",
-        titulo: "Pulsera Cactus",
-        imagen: "../img/pulserados.jpeg",
-        categoria: {
-            nombre: "Pulseras",
-            id: "pulseras",
-        },
-        precio: 700,
-    },
-    {
-        id: "Collar-Ojo",
-        titulo: "Collar Ojo Acero Blanco",
-        imagen: "../img/collaruno.jpeg",
-        categoria: {
-            nombre: "Collares",
-            id: "collares",
-        },
-        precio: 1000,
-    },
-    {
-        id: "Collar-Corazon",
-        titulo: "Collar Corazon Acero Blanco",
-        imagen: "../img/collardos.jpeg",
-        categoria: {
-            nombre: "Collares",
-            id: "collares",
-        },
-        precio: 1000,
-    },
-];
+let productos = [];
 
-const contenedorProductos = document.querySelector("#contenedorProductos");
-let botonesAgregar = document.querySelectorAll(".productoAgregar");
-const numeroCarrito = document.querySelector(".numeroCarrito");
+fetch("../js/productos.json")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+      productos = data;
+      console.log(productos);
+        cargarProductos(productos);
+  })
+  .catch(error => {
+    console.error('Error en la solicitud fetch:', error);
+  });
 
-function cargarProductos() {
+
+function cargarProductos(productosElegidos) {
+
     contenedorProductos.innerHTML = "";
-    productos.forEach(producto => {
+
+    productosElegidos.forEach(producto => {
         const div = document.createElement("div");
         div.classList.add("producto");
         div.innerHTML = `
-            <div class="card shadow-sm" data-aos="fade-left">
-                <img src="${producto.imagen}" alt="${producto.titulo}">
-                <button class="productoAgregar card-body" id="${producto.id}">
-                    <p class="card-text">${producto.titulo}</p>
-                    <p>$${producto.precio}</p>
-                </button>
-            </div>
+        <div class="producto-card card shadow-sm">
+    <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
+    <div class="producto-info">
+        <h5 class="producto-titulo">${producto.titulo}</h5>
+        <p class="producto-precio">$${producto.precio}</p>
+        <button class="producto-agregar" id="${producto.id}">Agregar al Carrito</button>
+    </div>
+</div>
+
         `;
-        contenedorProductos.append(div);
+        contenedorProductos.appendChild(div);
     });
     botonAgregar();
 }
 
-cargarProductos(productos);
+
+const contenedorProductos = document.querySelector("#contenedorProductos");
+let botonesAgregar = document.querySelectorAll(".producto-agregar");
+const numeroCarrito = document.querySelector(".numeroCarrito");
+
+
 
 function botonAgregar() {
-    botonesAgregar = document.querySelectorAll(".productoAgregar");
+    botonesAgregar = document.querySelectorAll(".producto-agregar");
 
     botonesAgregar.forEach(boton => {
         boton.addEventListener("click", agregarAlCarrito);
