@@ -74,6 +74,23 @@ if (productosDelCarritoLS) {
 }
 
 function agregarAlCarrito(e) {
+
+    Toastify({
+        text: "Producto agregado al Carrito!",
+        duration: 3000,
+        destination: "https://github.com/apvarun/toastify-js",
+        newWindow: true,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #dda15e, #bc6c25)",
+          borderRadius: "1.3rem",
+        },
+        onClick: function(){}
+      }).showToast();
+
     const idBoton = e.currentTarget.id;
     const productoAgregado = productos.find(producto => producto.id === idBoton);
 
@@ -85,7 +102,6 @@ function agregarAlCarrito(e) {
         productosDelCarrito.push(productoAgregado);
     }
     actualizarNumeroDelCarrito();
-    mostrarNotificacion("Usted ha agregado el producto al carrito!");
     localStorage.setItem("productosDelCarrito", JSON.stringify(productosDelCarrito));
 }
 
@@ -94,14 +110,3 @@ function actualizarNumeroDelCarrito() {
     numeroCarrito.innerText = numeroActualizado;
 }
 
-function mostrarNotificacion(mensaje) {
-    const notificacion = document.getElementById("notificacionProducto");
-    const mensajeNotificacion = document.getElementById("mensajeProducto");
-
-    mensajeNotificacion.textContent = mensaje;
-    notificacion.style.display = "block";
-
-    setTimeout(() => {
-        notificacion.style.display = "none";
-    }, 3000); 
-}
